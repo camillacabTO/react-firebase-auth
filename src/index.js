@@ -2,14 +2,16 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.scss'
 import App from './components/App'
-import Firebase from './firebase/Firebase'
-import firebaseContext from './firebase/context'
+import { FirebaseProvider } from './firebase/FirebaseContext'
+import { SessionProvider } from './firebase/SessionContext'
 
 ReactDOM.render(
-  <firebaseContext.Provider value={new Firebase()}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </firebaseContext.Provider>,
+  <FirebaseProvider>
+    <SessionProvider>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </SessionProvider>
+  </FirebaseProvider>,
   document.getElementById('root')
 )

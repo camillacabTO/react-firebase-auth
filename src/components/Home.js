@@ -1,9 +1,7 @@
-import React, { useContext } from 'react'
-import firebaseContext from '../firebase/context'
+import React from 'react'
 
 const Home = () => {
-  const bla = useContext(firebaseContext)
-  return <div>{bla.test}</div>
+  return <div>HOME</div>
 }
 
 export default Home

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from '../index.scss'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navigation from './Navigation'
@@ -9,8 +9,37 @@ import PasswordForget from './PasswordForget'
 import Home from './Home'
 import Account from './Account'
 import Admin from './Admin'
+import { useAuth } from '../firebase/FirebaseContext'
+import { useSession } from '../firebase/SessionContext'
+import PrivateRoute from './Routes/PrivateRoute'
+import AdminRoute from './Routes/AdminRoute'
 
 const App = () => {
+  const firebase = useAuth()
+  const { authUser, setAuthUser } = useSession()
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth.onAuthStateChanged(user => {
+      //firebase listener
+      if (user) {
+        console.log('user', user)
+        firebase.user(user.uid).on('value', snapshot => {
+          // find authenticated user in the DB
+          const mergedUser = {
+            id: user.uid,
+            email: user.email,
+            ...snapshot.val()
+          }
+          setAuthUser(mergedUser)
+          localStorage.setItem('user', JSON.stringify(mergedUser))
+        })
+      } else {
+        localStorage.removeItem('user')
+      }
+    })
+    return unsubscribe
+  }, [])
+
   return (
     <div>
       <Router>
@@ -20,9 +49,9 @@ const App = () => {
           <Route path='/signup' component={SignUp} />
           <Route path='/signin' component={SignIn} />
           <Route path='/pw-forget' component={PasswordForget} />
-          <Route path='/home' component={Home} />
-          <Route path='/account' component={Account} />
-          <Route path='/admin' component={Admin} />
+          <PrivateRoute path='/home' component={Home} />
+          <PrivateRoute path='/account' component={Account} />
+          <AdminRoute path='/admin' component={Admin} />
         </Switch>
       </Router>
     </div>
