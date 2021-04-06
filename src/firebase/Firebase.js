@@ -17,11 +17,16 @@ class Firebase {
     firebase.initializeApp(firebaseConfig)
     this.auth = firebase.auth()
     this.database = firebase.database()
+    this.googleProvider = new firebase.auth.GoogleAuthProvider()
   }
 
   signUpUser = (email, password) => {
     console.log('Inside signUp')
     return this.auth.createUserWithEmailAndPassword(email, password)
+  }
+
+  signInWithGoogle = () => {
+    return firebase.auth().signInWithPopup(this.googleProvider)
   }
 
   signInUser = (email, password) => {
@@ -41,6 +46,12 @@ class Firebase {
   user = id => this.database.ref(`users/${id}`) // returns a reference to this user.
 
   users = () => this.database.ref('users')
+
+  sendEmailVerification = () => {
+    return this.auth.currentUser.sendEmailVerification({
+      url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT
+    })
+  }
 }
 
 export default Firebase

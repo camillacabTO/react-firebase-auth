@@ -33,6 +33,8 @@ const SignUp = ({ history }) => {
         .user(user.user.uid)
         .set({ email: user.user.email, isAdmin: isAdminRef.current.checked })
 
+      await firebase.sendEmailVerification()
+
       setError(null)
       emailRef.current.value = ''
       passwordRef.current.value = ''
@@ -62,6 +64,7 @@ const SignUp = ({ history }) => {
           ref={confirmPasswordRef}
         />
         <label>
+          Is Admin?
           <input type='checkbox' ref={isAdminRef} />
         </label>
         <button type='submit'>Submit</button>

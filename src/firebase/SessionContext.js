@@ -8,6 +8,7 @@ export const useSession = () => {
 export const SessionProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(
     JSON.parse(localStorage.getItem('user'))
+    // avoids flicking once the page is first loaded. authenticated user is available right away
   )
 
   const value = {

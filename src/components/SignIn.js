@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../firebase/FirebaseContext'
+import SignInGoogle from './SignInGoogle'
 
 const SignIn = ({ history }) => {
   const emailRef = useRef()
@@ -47,6 +48,7 @@ const SignIn = ({ history }) => {
         />
         <button type='submit'>Submit</button>
       </form>
+      <SignInGoogle history={history} />
       {error && <p>{error}</p>}
       <Link to='/signup'>Don't have an account? SignUp now!</Link>
       <Link to='/pw-forget'>Forgot Password?</Link>

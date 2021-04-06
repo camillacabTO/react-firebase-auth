@@ -16,7 +16,7 @@ import AdminRoute from './Routes/AdminRoute'
 
 const App = () => {
   const firebase = useAuth()
-  const { authUser, setAuthUser } = useSession()
+  const { setAuthUser } = useSession()
 
   useEffect(() => {
     const unsubscribe = firebase.auth.onAuthStateChanged(user => {
@@ -28,6 +28,8 @@ const App = () => {
           const mergedUser = {
             id: user.uid,
             email: user.email,
+            emailVerified: user.emailVerified,
+            provider: user.providerData,
             ...snapshot.val()
           }
           setAuthUser(mergedUser)
